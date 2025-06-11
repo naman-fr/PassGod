@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from typing import List
 from cryptography.fernet import Fernet
 import os
-from dotenv import load_dotenv
+from dotenv import load_dotenv, set_key
 from pymongo.collection import Collection
 from bson import ObjectId
 from datetime import datetime
@@ -14,9 +14,21 @@ from .auth import get_current_user # Assuming get_current_user now works with Mo
 
 router = APIRouter()
 
-# Load encryption key from environment variable
-load_dotenv()
-ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY", Fernet.generate_key().decode())
+# Load encryption key from environment variable or generate a new one
+load_dotenv(override=True) # Ensure .env is loaded and can be overridden
+ENCRYPTION_KEY = os.getenv("ENCRYPTION_KEY")
+
+# If ENCRYPTION_KEY is not set, generate one and save it to .env
+if not ENCRYPTION_KEY:
+    ENCRYPTION_KEY = Fernet.generate_key().decode()
+    env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+    # Ensure the .env file exists before trying to set the key
+    if not os.path.exists(env_path):
+        with open(env_path, "w") as f:
+            f.write("")
+    set_key(env_path, "ENCRYPTION_KEY", ENCRYPTION_KEY)
+    print(f"Generated new ENCRYPTION_KEY and saved to {env_path}")
+
 cipher_suite = Fernet(ENCRYPTION_KEY.encode())
 
 def encrypt_password(password: str) -> str:

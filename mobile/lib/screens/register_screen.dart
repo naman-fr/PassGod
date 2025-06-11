@@ -54,34 +54,50 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
       try {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         await authProvider.register(
-          _emailController.text,
+          _emailController.text.trim(),
           _passwordController.text,
-          _fullNameController.text,
+          _fullNameController.text.trim(),
         );
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Registration successful! Please log in.'),
-            backgroundColor: Colors.green,
-          ),
-        );
-        context.go('/login');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Registration successful! Please log in.'),
+              backgroundColor: Colors.green,
+              duration: Duration(seconds: 3),
+            ),
+          );
+          context.go('/login');
+        }
       } catch (e) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Registration failed: ${e.toString()}'),
-            backgroundColor: Colors.red,
-          ),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Registration failed: ${e.toString()}'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
+              action: SnackBarAction(
+                label: 'Dismiss',
+                textColor: Colors.white,
+                onPressed: () {
+                  ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                },
+              ),
+            ),
+          );
+        }
       } finally {
-        setState(() {
-          _isLoading = false;
-        });
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    print('Building RegisterScreen...');
     return Scaffold(
       backgroundColor: Colors.blueAccent,
       body: Stack(
@@ -240,7 +256,7 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
                               onPressed: () {
                                 context.go('/login');
                               },
-                              child: Text(
+                              child: const Text(
                                 'Already have an account? Login',
                                 style: TextStyle(
                                   color: Colors.blueAccent,
@@ -261,4 +277,4 @@ class _RegisterScreenState extends State<RegisterScreen> with SingleTickerProvid
       ),
     );
   }
-} 
+}

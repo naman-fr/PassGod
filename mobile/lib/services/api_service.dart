@@ -2,8 +2,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/breach_alert.dart';
 import '../models/activity_notification.dart';
-import '../models/password.dart'; // Import the Password model
-import '../models/social_account.dart'; // Import the SocialAccount model
+import '../models/password.dart';
+import '../models/social_account.dart';
+import '../models/private_item.dart';
 
 class ApiService {
   static const String baseUrl = 'http://localhost:8000/api/v1';
@@ -23,11 +24,39 @@ class ApiService {
       if (response.body.isNotEmpty) {
         return jsonDecode(response.body);
       } else {
-        // This case should ideally not happen for a 200 OK response from a token endpoint
         throw Exception('Failed to login: Empty response body on 200 OK');
       }
     } else {
       throw Exception('Failed to login: ${response.statusCode} ${response.body}');
+    }
+  }
+
+  Future<void> register(String email, String password, String fullName) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/auth/register'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'email': email,
+          'password': password,
+          'full_name': fullName,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        // Registration successful
+        return;
+      } else if (response.statusCode == 400) {
+        final errorData = jsonDecode(response.body);
+        throw Exception(errorData['detail'] ?? 'Registration failed');
+      } else {
+        throw Exception('Registration failed: ${response.statusCode}');
+      }
+    } catch (e) {
+      if (e is Exception) {
+        rethrow;
+      }
+      throw Exception('Failed to connect to server');
     }
   }
 
@@ -253,23 +282,7 @@ class ApiService {
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode != 204) {
-      throw Exception('Failed to delete account: ${response.statusCode} ${response.body}');
+      throw Exception('Failed to delete user account: ${response.statusCode} ${response.body}');
     }
   }
-
-  // Registration API call
-  Future<void> register(String email, String password, String fullName) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/auth/register'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-        'full_name': fullName,
-      }),
-    );
-    if (response.statusCode != 201) {
-      throw Exception('Failed to register: ${response.statusCode} ${response.body}');
-    }
-  }
-}
+} 

@@ -12,6 +12,7 @@ import 'screens/settings_screen.dart'; // Import the new screen
 import 'screens/vault_screen.dart'; // Import VaultScreen
 import 'screens/social_screen.dart'; // Import SocialScreen
 import 'screens/register_screen.dart'; // Import RegisterScreen
+import 'screens/private_storage_screen.dart'; // New import
 
 void main() {
   runApp(
@@ -65,13 +66,18 @@ class MyApp extends StatelessWidget {
           path: '/social',
           builder: (context, state) => SocialScreen(),
         ),
+        GoRoute(
+          path: '/private-storage',
+          builder: (context, state) => PrivateStorageScreen(),
+        ),
       ],
       redirect: (context, state) {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
         final loggedIn = authProvider.isAuthenticated;
         final loggingIn = state.matchedLocation == '/login';
+        final registering = state.matchedLocation == '/register';
 
-        if (!loggedIn && !loggingIn) {
+        if (!loggedIn && !loggingIn && !registering) {
           return '/login';
         }
         if (loggedIn && loggingIn) {

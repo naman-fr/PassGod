@@ -25,10 +25,13 @@ class AuthProvider with ChangeNotifier {
     notifyListeners();
     try {
       await _apiService.register(email, password, fullName);
-    } finally {
+    } catch (e) {
       _isLoading = false;
       notifyListeners();
+      rethrow; // Propagate the error to the UI
     }
+    _isLoading = false;
+    notifyListeners();
   }
 
   Future<void> logout() async {

@@ -173,9 +173,10 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           const SizedBox(height: 20),
                           TextButton(
                             onPressed: () {
+                              print('Attempting to navigate to /register');
                               context.go('/register');
                             },
-                            child: Text(
+                            child: const Text(
                               'Don\'t have an account? Register',
                               style: TextStyle(
                                 color: Colors.blueAccent,

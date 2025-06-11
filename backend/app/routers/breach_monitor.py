@@ -26,7 +26,8 @@ async def check_password_breach(password: str) -> bool:
     prefix, suffix = sha1_hash[:5], sha1_hash[5:]
     
     async with aiohttp.ClientSession() as session:
-        headers = {"hibp-api-key": HIBP_API_KEY} if HIBP_API_KEY else {}
+        # Removed HIBP_API_KEY from headers for free tier usage
+        headers = {"User-Agent": "PassGod"}
         async with session.get(
             f"https://api.pwnedpasswords.com/range/{prefix}",
             headers=headers
@@ -41,7 +42,8 @@ async def check_password_breach(password: str) -> bool:
 async def check_email_breach_api(email: str) -> List[Dict[str, Any]]: # Renamed to avoid conflict
     """Check if an email has been involved in any breaches"""
     async with aiohttp.ClientSession() as session:
-        headers = {"hibp-api-key": HIBP_API_KEY} if HIBP_API_KEY else {}
+        # Removed HIBP_API_KEY from headers for free tier usage
+        headers = {"User-Agent": "PassGod"}
         async with session.get(
             f"https://haveibeenpwned.com/api/v3/breachedaccount/{email}",
             headers=headers
@@ -50,6 +52,9 @@ async def check_email_breach_api(email: str) -> List[Dict[str, Any]]: # Renamed 
                 return await response.json()
             elif response.status == 404:
                 return [] # Email not found in any breaches
+            elif response.status == 429: # Too Many Requests
+                print("Rate limit hit for HIBP API. Please wait before retrying.")
+                return []
             else:
                 response.raise_for_status() # Raise an exception for other HTTP errors
     return []

@@ -71,6 +71,14 @@ class AppDrawer extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.folder_special),
+            title: const Text('Private Storage'),
+            onTap: () {
+              context.go('/private-storage');
+              Navigator.pop(context);
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Settings'),
             onTap: () {
