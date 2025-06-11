@@ -1,0 +1,9 @@
+fastapi==0.104.1
+uvicorn==0.23.2
+motor==3.3.1
+pybcrypt==0.4
+python-jose[cryptography]==3.3.0
+python-dotenv==1.0.0
+email-validator==2.1.0.post1
+pydantic-settings==2.1.0
+requests==2.31.0 

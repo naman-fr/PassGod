@@ -1,0 +1,19 @@
+name: passgod_mobile
+version: 1.0.0+1
+description: PASSGOD Password Manager Mobile App
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  http: ^1.1.0
+  provider: ^6.0.5
+  flutter_secure_storage: ^8.0.0
+  local_auth: ^2.1.6
+  go_router: ^14.0.2
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+flutter:
+  uses-material-design: true 
