@@ -9,14 +9,14 @@
 <p align="center"><em>Universal Password Manager for Web, Mobile, and Social Accounts</em></p>
 
 <p align="center">
-  <a href="https://github.com/your-org/passgod/actions">
-    <img src="https://img.shields.io/github/actions/workflow/status/your-org/passgod/ci.yml?branch=main&style=for-the-badge" alt="CI Status" />
+  <a href="https://github.com/naman-fr/PassGod/actions">
+    <img src="https://img.shields.io/github/actions/workflow/status/naman-fr/PassGod/ci.yml?branch=master&style=for-the-badge" alt="CI Status" />
   </a>
-  <a href="https://pypi.org/project/passgod/">
-    <img src="https://img.shields.io/pypi/v/passgod?style=for-the-badge" alt="PyPI Version" />
+  <a href="https://github.com/naman-fr/PassGod/releases">
+    <img src="https://img.shields.io/github/v/release/naman-fr/PassGod?style=for-the-badge" alt="Release Version" />
   </a>
-  <a href="https://github.com/your-org/passgod/blob/main/LICENSE">
-    <img src="https://img.shields.io/github/license/your-org/passgod?style=for-the-badge" alt="License" />
+  <a href="https://github.com/naman-fr/PassGod/blob/master/LICENSE">
+    <img src="https://img.shields.io/github/license/naman-fr/PassGod?style=for-the-badge" alt="License" />
   </a>
 </p>
 
